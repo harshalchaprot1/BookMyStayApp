@@ -1,0 +1,40 @@
+package bookmystay.service;
+
+import bookmystay.exception.InvalidBookingException;
+import bookmystay.model.RoomInventory;
+
+/**
+ * Use Case 9: Reservation Validator
+ *
+ * Validates booking requests before they are processed.
+ * Centralizes validation rules to avoid duplication.
+ *
+ * @author Harshal
+ * @version 9.0
+ */
+public class ReservationValidator {
+
+    /**
+     * Validates booking input provided by the user.
+     *
+     * @param guestName name of the guest
+     * @param roomType requested room type
+     * @param inventory centralized inventory
+     * @throws InvalidBookingException if validation fails
+     */
+    public void validate(String guestName, String roomType, RoomInventory inventory)
+            throws InvalidBookingException {
+
+        if (guestName == null || guestName.trim().isEmpty()) {
+            throw new InvalidBookingException("Guest name cannot be empty.");
+        }
+
+        if (!inventory.getRoomAvailability().containsKey(roomType)) {
+            throw new InvalidBookingException("Invalid room type selected.");
+        }
+
+        if (inventory.getRoomAvailability().get(roomType) <= 0) {
+            throw new InvalidBookingException("No " + roomType + " rooms available.");
+        }
+    }
+}
